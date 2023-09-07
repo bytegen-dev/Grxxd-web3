@@ -62,11 +62,11 @@ const Wallet = ({active, walletState}) => {
                             ~
                         </div>
                         <div className='value'>
-                            <span>{walletState.details.balance ? walletState.details.balance : "..."}</span>
+                            <span>{walletState.details.balance ? walletState.details.balance.slice(0,5) : "..."}</span>
                             <button>ETH</button>
                         </div>
                     </div>
-                    <div className='info'>
+                    {(walletState.details.network && walletState.details.network !== "...") && <div className='info'>
                         <div className='type'>
                             Network
                         </div>
@@ -76,7 +76,7 @@ const Wallet = ({active, walletState}) => {
                         <div className='value'>
                             <p>{walletState.details.network ? walletState.details.network: "..."}</p>
                         </div>
-                    </div>
+                    </div>}
                     <div className='info'>
                         <div className='type'>
                             Provider
