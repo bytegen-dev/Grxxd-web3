@@ -47,9 +47,11 @@ function App() {
       // Create a web3 instance using the current provider
       const web3 = new Web3(window.ethereum);
       setWeb3(web3)
+      getCurrentWalletConnected()
     } else{
       console.error("Metamask is not installed")
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
   const connectWallet = async () =>{
@@ -167,7 +169,7 @@ function App() {
         // // Getting network info
         let networkType = "..."
 
-        if(web3.eth.net.getNetworkType){
+        if(web3.eth?.net.getNetworkType){
           networkType = await web3.eth.net?.getNetworkType();
         }
           setTimeout(()=>{
@@ -191,17 +193,12 @@ function App() {
         }
       } catch (err) {
         console.error(err.message);
+        // connectWallet()
         setTimeout(()=>{
-          setWalletState({
-            state: "Disconnected",
-            connected: false,
-            details: {
-              address: "",
-              balance: "",
-              blockChain: "",
-              network: "",
-              provider: "",
-            },
+          setWalletState((prev)=>{
+            return ({
+              ...prev
+            })
           })
         }, 1000)
       }
@@ -320,11 +317,6 @@ function App() {
     addWalletListener()
 
   }, [walletState.details.address]);
-  
-  useEffect(()=>{
-    getCurrentWalletConnected()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[])
 
   return (
     <div className={`app ${showMenu ? "show-menu": ""} ${walletState.connected ? "connected": ""} ${(walletState.state === "Connecting"||walletState.state === "Disconnecting")?"opacitate":""}`}>
