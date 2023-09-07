@@ -10,6 +10,7 @@
     font-size: 1rem;
     font-family: 'Ubuntu', "Roboto Mono", monospace;
     -webkit-tap-highlight-color: transparent;
+    transition: all 0.3s ease;
 }
 
 button, a, .click{
@@ -56,13 +57,21 @@ body{
     background-image: linear-gradient(#fffffff5, #fff), url('https://thumbs.dreamstime.com/b/abstract-background-connected-blocks-bitcoin-orange-color-gradients-abstract-background-connected-blocks-bitcoin-cryptocurrency-140633229.jpg');
     background-size: cover;
     background-position: center;
-    transition: all 0.3s ease;
+    transition: all 0s ease;
+    
+    &.connected{
+        filter: hue-rotate(320deg) invert(10);
+        background-color: #ddd;
+        transition: all 0.3s ease;
+        background-image: linear-gradient(#ddd, #ddd), url('https://thumbs.dreamstime.com/b/abstract-background-connected-blocks-bitcoin-orange-color-gradients-abstract-background-connected-blocks-bitcoin-cryptocurrency-140633229.jpg');
+    }
 }
 
 .opacitate{
-    opacity: 0.3;
+    opacity: 0.7;
     pointer-events: none;
 }
+
 
 .menu-big{
     position: fixed;
@@ -249,7 +258,7 @@ body{
                 }
 
                 &.active{
-                    background-color: #0001;
+                    background-color: #0002;
                 }
                 
                 &:hover, &:focus{
@@ -499,7 +508,7 @@ body{
                             height: 30px;
                             border: none;
                             border-radius: 10px;
-                            background-color: #aaa;
+                            background-color: #0009;
                             font-size: 18px;
                             display: flex;
                             justify-content: center;

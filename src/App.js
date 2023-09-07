@@ -99,7 +99,7 @@ function App() {
   }
 
   return (
-    <div className={`app ${showMenu ? "show-menu": ""} ${(walletState.state === "Connecting"||walletState.state === "Disconnecting")?"opacitate":""}`}>
+    <div className={`app ${showMenu ? "show-menu": ""} ${walletState.connected ? "connected": ""} ${(walletState.state === "Connecting"||walletState.state === "Disconnecting")?"opacitate":""}`}>
       {/* components first */}
       <NavBar changePage={changePage} activePage={activePage} toggleMenu={toggleMenu} walletState={walletState} openGithub={openGithub} />
       <Menu changePage={changePage} activePage={activePage} toggleMenu={toggleMenu} openGithub={openGithub} walletState={walletState} />
