@@ -47,12 +47,18 @@ function App() {
       // Create a web3 instance using the current provider
       const web3 = new Web3(window.ethereum);
       setWeb3(web3)
-      getCurrentWalletConnected()
     } else{
       console.error("Metamask is not installed")
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
+  
+  useEffect(()=>{
+    if(web3){
+      getCurrentWalletConnected()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[web3])
 
   const connectWallet = async () =>{
     setWalletState((prev)=>{
@@ -151,56 +157,60 @@ function App() {
 
   const getCurrentWalletConnected = async () => {
     if (typeof window != "undefined" && typeof window.ethereum != "undefined") {
-      try {
-        const accounts = await window.ethereum.request({
-          method: "eth_accounts",
-        });
-        if (accounts.length > 0) {
-          const address = accounts[0]
-          // Getting the wallet balance
-        let etherBalance = "..."
-        if(web3.eth){
-          const balanceWei = await web3.eth.getBalance(address);
-          if(balanceWei){
-            etherBalance = web3.utils.fromWei(balanceWei, 'ether'); 
+      if(web3){
+        try {
+          const accounts = await window.ethereum.request({
+            method: "eth_accounts",
+          });
+          if (accounts.length > 0) {
+            const address = accounts[0]
+            // Getting the wallet balance
+          let etherBalance = "..."
+          if(web3.eth){
+            const balanceWei = await web3.eth.getBalance(address);
+            if(balanceWei){
+              etherBalance = web3.utils.fromWei(balanceWei, 'ether'); 
+            }
           }
-        }
+    
+          // // Getting network info
+          let networkType = "..."
   
-        // // Getting network info
-        let networkType = "..."
-
-        if(web3.eth?.net.getNetworkType){
-          networkType = await web3.eth.net?.getNetworkType();
-        }
+          if(web3.eth?.net.getNetworkType){
+            networkType = await web3.eth.net?.getNetworkType();
+          }
+            setTimeout(()=>{
+              setWalletState((prev)=>{
+                return({
+                  ...prev,
+                  state: 'Connected',
+                  connected: true,
+                  details: {
+                    address: address?address:"",
+                    balance: etherBalance?etherBalance: "...",
+                    blockChain: 'Eth',
+                    network: networkType?networkType:"...",
+                    provider: window.ethereum.isMetaMask ? 'MetaMask' : 'Unknown',
+                  },
+                })
+              });
+            }, 1000)
+          } else {
+            console.log("Connect to MetaMask using the Connect button");
+          }
+        } catch (err) {
+          console.error(err.message);
+          // connectWallet()
           setTimeout(()=>{
             setWalletState((prev)=>{
-              return({
-                ...prev,
-                state: 'Connected',
-                connected: true,
-                details: {
-                  address: address?address:"",
-                  balance: etherBalance?etherBalance: "...",
-                  blockChain: 'Eth',
-                  network: networkType?networkType:"...",
-                  provider: window.ethereum.isMetaMask ? 'MetaMask' : 'Unknown',
-                },
+              return ({
+                ...prev
               })
-            });
-          }, 1000)
-        } else {
-          console.log("Connect to MetaMask using the Connect button");
-        }
-      } catch (err) {
-        console.error(err.message);
-        // connectWallet()
-        setTimeout(()=>{
-          setWalletState((prev)=>{
-            return ({
-              ...prev
             })
-          })
-        }, 1000)
+          }, 1000)
+        }
+      } else{
+        console.log("Click connect wallet");
       }
     } else {
       /* MetaMask is not installed */
