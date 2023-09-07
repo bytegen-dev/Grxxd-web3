@@ -64,6 +64,18 @@ body{
         background-color: #ddd;
         transition: all 0.3s ease;
         background-image: linear-gradient(#ddd, #ddd), url('https://thumbs.dreamstime.com/b/abstract-background-connected-blocks-bitcoin-orange-color-gradients-abstract-background-connected-blocks-bitcoin-cryptocurrency-140633229.jpg');
+
+        .sub{
+            filter: invert(10);
+            color: #ccc;
+
+            a{
+                &:hover{
+                    color: $primary-color
+                    ;
+                }
+            }
+        }
     }
 }
 
@@ -409,6 +421,7 @@ body{
                         justify-content: center;
                         align-items: center;
                         gap: 15px;
+                        min-height: 50px;
                         
                         svg{
                             width: 40px;
@@ -428,6 +441,7 @@ body{
                         margin-bottom: 30px;
                         button{
                             padding: 5px 30px;
+                            min-height: 45px;
                             font-size: 21px;
                             gap: 10px;
                             border-radius: 10px;
