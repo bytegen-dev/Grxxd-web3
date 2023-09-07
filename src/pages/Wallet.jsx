@@ -5,7 +5,9 @@ const Wallet = ({active, walletState}) => {
     const formattedAddressFirst = walletState.details.address?.slice(0, 7)
     const formattedAddressLast = walletState.details.address?.slice(-3, -1)
     // eslint-disable-next-line react-hooks/exhaustive-deps
+    const bal = walletState.details.balance
 
+    const balX = bal.slice(0,6)
 
     const formattedAddress = formattedAddressFirst + "..." + formattedAddressLast
 
@@ -62,9 +64,8 @@ const Wallet = ({active, walletState}) => {
                             ~
                         </div>
                         <div className='value'>
-                            <span>{walletState.details.balance ? walletState.details.balance.slice(0,6) : "..."}</span>
+                            <span>{balX ? balX : "..."}</span>
                             <button onClick={()=>{
-                                const bal = walletState.details.balance
                                 alert("Your wallet balance is: " + bal)
                             }}>ETH</button>
                         </div>

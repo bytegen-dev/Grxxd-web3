@@ -155,6 +155,21 @@ function App() {
         });
         if (accounts.length > 0) {
           const address = accounts[0]
+          // Getting the wallet balance
+        let etherBalance = "..."
+        if(web3.eth){
+          const balanceWei = await web3.eth.getBalance(address);
+          if(balanceWei){
+            etherBalance = web3.utils.fromWei(balanceWei, 'ether'); 
+          }
+        }
+  
+        // // Getting network info
+        let networkType = "..."
+
+        if(web3.eth.net.getNetworkType){
+          networkType = await web3.eth.net?.getNetworkType();
+        }
           setTimeout(()=>{
             setWalletState((prev)=>{
               return({
@@ -163,9 +178,9 @@ function App() {
                 connected: true,
                 details: {
                   address: address?address:"",
-                  balance: 0.45,
+                  balance: etherBalance?etherBalance: "...",
                   blockChain: 'Eth',
-                  network: "sepoliaEth",
+                  network: networkType?networkType:"...",
                   provider: window.ethereum.isMetaMask ? 'MetaMask' : 'Unknown',
                 },
               })
