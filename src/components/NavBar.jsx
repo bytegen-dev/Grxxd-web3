@@ -7,7 +7,11 @@ const NavBar = ({changePage, activePage, toggleMenu, openGithub, walletState}) =
     <div className='nav-bar'>
         <div className='content'>
             <div className={walletState.connected ? 'logo connected' : 'logo'} onClick={()=>{
+                if(activePage === "wallet"){
                     changePage("home")
+                }else{
+                    changePage("wallet")
+                }
             }}></div>
             <div className='links-holder'>
                 <button onClick={()=>{

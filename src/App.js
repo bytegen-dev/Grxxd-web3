@@ -76,15 +76,14 @@ function App() {
         if(web3.eth){
           const balanceWei = await web3.eth.getBalance(address);
           if(balanceWei){
-            etherBalance = web3.utils.fromWei(balanceWei, 'ether');
-            
+            etherBalance = web3.utils.fromWei(balanceWei, 'ether'); 
           }
         }
   
         // // Getting network info
         let networkType = "..."
 
-        if(web3.eth.net){
+        if(web3.eth.net.getNetworkType){
           networkType = await web3.eth.net?.getNetworkType();
         }
   
@@ -112,6 +111,7 @@ function App() {
   
       } catch (error) {
         //Handling errors
+        getCurrentWalletConnected()
         console.error('Error connecting wallet:', error);
 
         setTimeout(()=>{
