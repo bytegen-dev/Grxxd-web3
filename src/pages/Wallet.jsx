@@ -62,8 +62,11 @@ const Wallet = ({active, walletState}) => {
                             ~
                         </div>
                         <div className='value'>
-                            <span>{walletState.details.balance ? walletState.details.balance.slice(0,5) : "..."}</span>
-                            <button>ETH</button>
+                            <span>{walletState.details.balance ? walletState.details.balance.slice(0,6) : "..."}</span>
+                            <button onClick={()=>{
+                                const bal = walletState.details.balance
+                                alert("Your wallet balance is: " + bal)
+                            }}>ETH</button>
                         </div>
                     </div>
                     {(walletState.details.network && walletState.details.network !== "...") && <div className='info'>
