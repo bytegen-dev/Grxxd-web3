@@ -2,8 +2,11 @@ import React from 'react'
 import { FaCopy } from 'react-icons/fa'
 
 const Wallet = ({active, walletState}) => {
-    const formattedAddressFirst = walletState.details.address.slice(0, 7)
-    const formattedAddressLast = walletState.details.address.slice(-3, -1)
+    const formattedAddressFirst = walletState.details.address?.slice(0, 7)
+    const formattedAddressLast = walletState.details.address?.slice(-3, -1)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+
+
     const formattedAddress = formattedAddressFirst + "..." + formattedAddressLast
 
     function copyToClipboardWithConfirmation(value) {
@@ -46,7 +49,7 @@ const Wallet = ({active, walletState}) => {
                     <div className='bubble'></div>
                 </div>
                 <div className='address'>
-                    <span>{formattedAddress}</span><button onClick={()=>{
+                    <span>{formattedAddressFirst?formattedAddress:"..."}</span><button onClick={()=>{
                         copyToClipboardWithConfirmation(walletState.details.address)
                     }}><FaCopy /></button>
                 </div>

@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import Wallet from "./pages/Wallet";
 import NavBar from "./components/NavBar";
 import Menu from "./components/Menu";
+import Web3 from "web3";
 // import {Web3} from "web3"
 
 function App() {
@@ -38,6 +39,19 @@ function App() {
     },
   })
 
+  const [web3, setWeb3] = useState(null)
+
+  useEffect(()=>{
+    // Check if MetaMask is installed and accessible
+    if (typeof window.ethereum !== 'undefined') {
+      // Create a web3 instance using the current provider
+      const web3 = new Web3(window.ethereum);
+      setWeb3(web3)
+    } else{
+      console.error("Metamask is not installed")
+    }
+  },[])
+
   const connectWallet = async () =>{
     setWalletState((prev)=>{
       return ({
@@ -57,12 +71,22 @@ function App() {
         const accounts = await window.ethereum.request({ method: 'eth_accounts' });
         const address = accounts[0];
   
-        // // Getting the wallet balance
-        // const balance = await Web3.eth.getBalance(address);
-        // const etherBalance = Web3.utils.fromWei(balance, 'ether');
+        // Getting the wallet balance
+        let etherBalance = "..."
+        if(web3.eth){
+          const balanceWei = await web3.eth.getBalance(address);
+          if(balanceWei){
+            etherBalance = web3.utils.fromWei(balanceWei, 'ether');
+            
+          }
+        }
   
         // // Getting network info
-        // const networkType = await Web3.eth.net.getNetworkType();
+        let networkType = "..."
+
+        if(web3.eth.net){
+          networkType = await web3.eth.net?.getNetworkType();
+        }
   
         // // I'm setting wallet state here
         // //Added setTimeout to give the browser breathing space
@@ -75,16 +99,16 @@ function App() {
               connected: true,
               details: {
                 address: address?address:"",
-                balance: 0.45,
-                blockChain: 'Eth',
-                network: "sepoliaEth",
+                balance: etherBalance?etherBalance:"....",
+                blockChain: "eth",
+                network: networkType?networkType:"...",
                 provider: window.ethereum.isMetaMask ? 'MetaMask' : 'Unknown',
               },
             })
           });
 
           setActivePage("wallet")
-        }, 1000)
+        }, 500)
   
       } catch (error) {
         //Handling errors
@@ -224,33 +248,43 @@ function App() {
   useEffect(() => {
     async function addWalletListener() {
       if (typeof window != "undefined" && typeof window.ethereum != "undefined") {
-        window.ethereum.on("accountsChanged", (accounts) => {
-          const address = accounts[0]
-            setTimeout(()=>{
-              setWalletState((prev)=>{
-                return({
-                  ...prev,
-                  state: 'Connected',
-                  connected: true,
-                  details: {
-                    address: address?address:"",
-                    balance: 0.45,
-                    blockChain: 'Eth',
-                    network: "sepoliaEth",
-                    provider: window.ethereum.isMetaMask ? 'MetaMask' : 'Unknown',
-                  },
-                })
-              });
+        try{
+          window.ethereum.on("accountsChanged", (accounts) => {
+            // const address = accounts[0]
     
-              if(!accounts[0]){
-                setActivePage("home")
-                disconnectWallet()
-              }
+                setTimeout(()=>{
+                  setWalletState({
+                    state: "Disconnected",
+                    connected: false,
+                    details: {
+                      address: "",
+                      balance: "",
+                      blockChain: "",
+                      network: "",
+                      provider: "",
+                    },
+                  })
+                }, 100)
+            });
+          } catch{
+            setActivePage("home")
+            setTimeout(()=>{
+              setWalletState({
+                state: "Disconnected",
+                connected: false,
+                details: {
+                  address: "",
+                  balance: "",
+                  blockChain: "",
+                  network: "",
+                  provider: "",
+                },
+              })
             }, 1000)
-          console.log(accounts[0]);
-        });
+        }
       } else {
         /* MetaMask is not installed */
+        setActivePage("home")
         setTimeout(()=>{
           setWalletState({
             state: "Disconnected",
@@ -268,9 +302,14 @@ function App() {
       }
     };
 
-    getCurrentWalletConnected()
     addWalletListener()
+
   }, [walletState.details.address]);
+  
+  useEffect(()=>{
+    getCurrentWalletConnected()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[])
 
   return (
     <div className={`app ${showMenu ? "show-menu": ""} ${walletState.connected ? "connected": ""} ${(walletState.state === "Connecting"||walletState.state === "Disconnecting")?"opacitate":""}`}>
