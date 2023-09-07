@@ -1,0 +1,289 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-size: 1rem;
+}
+
+button, a, .click{
+    cursor: pointer;
+}
+
+$primary-color: #ee3413;
+$secondary-color: #222;
+
+::-webkit-scrollbar{
+    width: 0px;
+    height: 0px;
+}
+
+.app{
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #ddd;
+    overflow: hidden;
+}
+
+.menu-big{
+    position: fixed;
+    z-index: 110;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transition: all 0.5s ease;
+    background-color: #fffe;
+    backdrop-filter: blur(10px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    padding: 0 5vw;
+
+    .content{
+        width: 100%;
+        height: 100%;
+        padding-top: 20vh;
+
+        .close{
+            position: fixed;
+            top: 10px;
+            right: 5vw;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 500px;
+            border: none;
+            background-color: transparent;
+            transition: all 0.3s ease;
+            
+            svg{
+                transition: all 0.3s ease;
+                font-size: 25px;
+            }
+
+            &:hover, &:focus{
+                svg{
+                    transform: rotate(360deg);
+                }
+                background-color: #0001;
+            }
+        }
+
+        .links-holder{
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-start;
+            gap: 10px;
+
+            button{
+                width: 100%;
+                background-color: transparent;
+                border: none;
+                padding: 15px 20px;
+                display: flex;
+                justify-content: flex-start;
+                align-items: center;
+                gap: 7px;
+                border-left: 4px solid transparent;
+                transition: all 0.3s ease;
+                border-radius: 5px;
+                
+                svg{
+                    font-size: 14px;
+                    opacity: 0.2;
+                    transition: all 0.3s ease;
+                }
+                
+                &:hover, &:focus{
+                    background-color: #0001;
+
+                    svg{
+                        opacity: 1;
+                        transform: translateX(5px) scale(1.1);
+                    }
+                }
+                
+                &.active, &:first-child{
+                    padding: 15px 20px;
+                    border-left: 4px solid $primary-color;
+                    background-color: #0002;
+                }
+            }
+        }
+    }
+}
+
+.show-menu{
+    .menu-big{
+        opacity: 1;
+        visibility: visible;
+        pointer-events: all;
+    }
+}
+
+.nav-bar{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px 5vw;
+    z-index: 100;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    & > .content{
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 1300px;
+
+        .logo{
+            width: 45px;
+            height: 45px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 10px;
+            background-image: url(./assets/logo512.png);
+            background-size: cover;
+            transition: all 0.3s ease;
+
+            &:hover, &:focus{
+                transform: rotate(45deg);
+            }
+        }
+
+        .links-holder{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+
+            button{
+                padding: 10px 15px;
+                background-color: transparent;
+                color: #000;
+                font-weight: 500;
+                border: none;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 8px;
+                transition: all 0.3s ease;
+                
+                svg{
+                    font-size: 13px;
+                    transition: all 0.3s ease;
+                    opacity: 0.3;
+                    pointer-events: none;
+                }
+                
+                &:hover, &:focus{
+                    svg{
+                        opacity: 1;
+                        pointer-events: all;
+                        transform: translateX(3px);
+                    }
+                }
+            }
+
+            @media screen and (max-width: 660px){
+                display: none;
+            }
+        }
+        
+        .status-btn{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            button{
+                padding: 10px 20px;
+                background-color: $primary-color;
+                color: #000;
+                font-weight: 600;
+                border: none;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 10px;
+                border-radius: 100px;
+                color: #fff;
+                transition: all 0.3s ease;
+
+                &.hamburger{
+                    padding: 0;
+                    height: 45px;
+                    width: 45px;
+                    transform: rotate(90deg);
+                    color: #000;
+                    display: none;
+                    @media screen and (max-width: 660px) {
+                        display: flex;
+                    }
+                    
+                    svg{
+                        font-size: 27px;
+                    }
+                    background-color: transparent;
+
+                    &:hover, &:focus{
+                        transform: scale(1);
+                        background-color: #0002;
+                    }
+                }
+
+                &:hover, &:focus{
+                    transform: scale(1.1);
+                }
+            }
+        }
+    }
+}
+
+.page{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    transition: all 0.3s ease;
+
+    &.active{
+        transform: translateY(0) !important;
+    }
+
+    & > .content{
+        width: 100%;
+        height: 100%;
+    }
+
+    &.home{
+        transform: translateY(-100%);
+    }
+    
+    &.wallet{
+        transform: translateY(100%);
+    }
+}
