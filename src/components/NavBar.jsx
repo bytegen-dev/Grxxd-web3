@@ -1,20 +1,28 @@
 import React from 'react'
-import {FaExternalLinkAlt, FaPlus} from 'react-icons/fa'
+import {FaExternalLinkAlt } from 'react-icons/fa'
 import {GoKebabHorizontal} from 'react-icons/go'
 
-const NavBar = ({changePage, activePage, toggleMenu}) => {
+const NavBar = ({changePage, activePage, toggleMenu, openGithub, walletState}) => {
   return (
     <div className='nav-bar'>
         <div className='content'>
-            <div className='logo'></div>
+            <div className={walletState.connected ? 'logo connected' : 'logo'} onClick={()=>{
+                    changePage("home")
+            }}></div>
             <div className='links-holder'>
-                <button> Home </button>
-                <button> Wallet </button>
-                <button> Github <FaExternalLinkAlt /> </button>
+                <button onClick={()=>{
+                    changePage("home")
+                }} className={`${activePage==="home"?"active":""} btn`}> Home </button>
+                {walletState.connected && <button onClick={()=>{
+                    changePage("wallet")
+                }} className={`${activePage==="wallet"?"active":""} btn`}> Wallet </button>}
+                <button onClick={()=>{
+                    openGithub()
+                }} className="github-btn"> Github <FaExternalLinkAlt /> </button>
             </div>
             <div className='status-btn'>
-                <button>
-                    Connect <FaPlus />
+                <button className={walletState.connected ? "" : 'empty'}>
+                    {walletState.state}
                 </button>
                 <button className='hamburger' onClick={()=>{
                     toggleMenu(true)
