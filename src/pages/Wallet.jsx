@@ -4,7 +4,6 @@ import { FaCopy } from 'react-icons/fa'
 const Wallet = ({active, walletState}) => {
     const formattedAddressFirst = walletState.details.address?.slice(0, 7)
     const formattedAddressLast = walletState.details.address?.slice(-3, -1)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     const bal = walletState.details.balance
 
     const balX = bal.slice(0,6)

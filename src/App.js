@@ -50,14 +50,88 @@ function App() {
     } else{
       console.error("Metamask is not installed")
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
   
   useEffect(()=>{
+    const getCurrentWalletConnectedX = async () => {
+      if (typeof window != "undefined" && typeof window.ethereum != "undefined") {
+        if(web3){
+          try {
+            const accounts = await window.ethereum.request({
+              method: "eth_accounts",
+            });
+            if (accounts.length > 0) {
+              const address = accounts[0]
+              // Getting the wallet balance
+            let etherBalance = "..."
+            if(web3.eth){
+              const balanceWei = await web3.eth.getBalance(address);
+              if(balanceWei){
+                etherBalance = web3.utils.fromWei(balanceWei, 'ether'); 
+              }
+            }
+      
+            // // Getting network info
+            let networkType = "..."
+    
+            if(web3.eth?.net.getNetworkType){
+              networkType = await web3.eth.net?.getNetworkType();
+            }
+              setTimeout(()=>{
+                setWalletState((prev)=>{
+                  return({
+                    ...prev,
+                    state: 'Connected',
+                    connected: true,
+                    details: {
+                      address: address?address:"",
+                      balance: etherBalance?etherBalance: "...",
+                      blockChain: 'Eth',
+                      network: networkType?networkType:"...",
+                      provider: window.ethereum.isMetaMask ? 'MetaMask' : 'Unknown',
+                    },
+                  })
+                });
+              }, 1000)
+            } else {
+              console.log("Connect to MetaMask using the Connect button");
+            }
+          } catch (err) {
+            console.error(err.message);
+            // connectWallet()
+            setTimeout(()=>{
+              setWalletState((prev)=>{
+                return ({
+                  ...prev
+                })
+              })
+            }, 1000)
+          }
+        } else{
+          console.log("Click connect wallet");
+        }
+      } else {
+        /* MetaMask is not installed */
+        console.log("Please install MetaMask");
+        setTimeout(()=>{
+          setWalletState({
+            state: "Disconnected",
+            connected: false,
+            details: {
+              address: "",
+              balance: "",
+              blockChain: "",
+              network: "",
+              provider: "",
+            },
+          })
+        }, 1000)
+      }
+    };
+
     if(web3){
-      getCurrentWalletConnected()
+      getCurrentWalletConnectedX()
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[web3])
 
   const connectWallet = async () =>{
